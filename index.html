@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>劣币驱逐良币</title>
+<title>劣币驱逐良币 · VIBE 知识大赏</title>
 <style>
 :root{--bg:#0a0a0e;--fg:#f5f2eb;--sub:#a6a29a;--gold:#f3c877;--gold-glow:#f3c87740;--bad:#7fa89a;box-sizing:border-box}
 html,body{height:100%;margin:0;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -9,50 +9,95 @@ html,body{height:100%;margin:0;background:#000;display:flex;align-items:center;j
 canvas{position:absolute;inset:0;width:100%;height:100%}
 #sc{position:absolute;inset:0}
 
-/* 页面上下垂直结构 */
-.scene{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:4.2cqw 4.5cqw 3.6cqw;animation:in .8s cubic-bezier(.16,1,.3,1) forwards}
+/* 页面场景容器 */
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:3.8cqw 4.5cqw 3.2cqw;animation:in .6s cubic-bezier(.16,1,.3,1) forwards}
 .scene.out{animation:out .5s cubic-bezier(.7,0,.84,0) forwards}
-@keyframes in{from{opacity:0;filter:blur(1.5cqw);transform:scale(.98)}to{opacity:1;filter:none;transform:scale(1)}}
-@keyframes out{to{opacity:0;filter:blur(1.5cqw);transform:scale(1.02)}}
+@keyframes in{from{opacity:0;filter:blur(1.2cqw)}to{opacity:1;filter:none}}
+@keyframes out{to{opacity:0;filter:blur(1.2cqw);transform:scale(1.02)}}
 
-/* 顶部：主题与标题 */
-.hd{display:flex;flex-direction:column;align-items:center;text-align:center;animation:down .8s cubic-bezier(.2,.8,.2,1) forwards}
-@keyframes down{from{opacity:0;transform:translateY(-1.2cqw)}to{opacity:1;transform:none}}
-.k{font:600 1.15cqw system-ui,sans-serif;letter-spacing:.3cqw;color:var(--gold);margin-bottom:.5cqw}
-.h{font-size:3.4cqw;font-weight:700;line-height:1.2;margin:0;letter-spacing:.05cqw}
-.h b{color:var(--gold);text-shadow:0 0 1.5cqw var(--gold-glow);font-weight:inherit}
+/* 标题：初始居中聚焦，停留阅读后平滑上浮归位 */
+.hd{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  z-index:5;
+  will-change:transform,opacity;
+  animation:titleStage 2.2s cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes titleStage{
+  0%{opacity:0;filter:blur(1.2cqw);transform:translateY(17.5cqw) scale(1.08)}
+  22%{opacity:1;filter:blur(0);transform:translateY(17.5cqw) scale(1.08)}
+  56%{opacity:1;filter:blur(0);transform:translateY(17.5cqw) scale(1.08)}
+  100%{opacity:1;filter:blur(0);transform:translateY(0) scale(1)}
+}
 
-/* 中部：动画视觉 */
-.vis-box{display:flex;flex-direction:column;align-items:center;justify-content:center;animation:fade .9s ease forwards}
-@keyframes fade{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
-.vis{height:31.5cqw;aspect-ratio:800/520;border:1px solid #ffffff1a;border-radius:1.2cqw;background:linear-gradient(165deg,#ffffff0c,#ffffff02);padding:.6cqw 1cqw;display:flex;align-items:center;justify-content:center}
+.k{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.3cqw 1cqw;
+  border-radius:99cqw;
+  background:rgba(243,200,119,.08);
+  border:1px solid rgba(243,200,119,.28);
+  font:600 1.15cqw system-ui,sans-serif;
+  letter-spacing:.3cqw;
+  color:var(--gold);
+  margin-bottom:.6cqw;
+}
+.h{font-size:3.5cqw;font-weight:700;line-height:1.25;margin:0;letter-spacing:.05cqw}
+.h b{color:var(--gold);text-shadow:0 0 1.6cqw var(--gold-glow);font-weight:inherit}
+
+/* 中部动画视觉：标题上浮时淡入展开 */
+.vis-box{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  transform:translateY(2.2cqw) scale(.95);
+  animation:visStage 1s cubic-bezier(.16,1,.3,1) 1.25s forwards;
+}
+@keyframes visStage{
+  from{opacity:0;filter:blur(.8cqw);transform:translateY(2.2cqw) scale(.95)}
+  to{opacity:1;filter:none;transform:translateY(0) scale(1)}
+}
+.vis{height:29cqw;aspect-ratio:800/520;border:1px solid #ffffff1a;border-radius:1.2cqw;background:linear-gradient(165deg,#ffffff0d,#ffffff02);padding:.6cqw 1cqw;display:flex;align-items:center;justify-content:center;box-shadow:0 1.5cqw 3cqw rgba(0,0,0,.45)}
 .vis svg{width:100%;height:100%;display:block}
 .cap{font:1.1cqw system-ui,sans-serif;color:var(--sub);text-align:center;letter-spacing:.15cqw;margin-top:.6cqw}
 
-/* 底部：单行核心正文 */
-.ft{width:100%;display:flex;justify-content:center;align-items:center;animation:up .8s cubic-bezier(.2,.8,.2,1) .15s forwards;opacity:0}
-@keyframes up{from{opacity:0;transform:translateY(1.2cqw)}to{opacity:1;transform:none}}
+/* 底部核心正文：紧随视觉展开后上浮 */
+.ft{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  transform:translateY(1.4cqw);
+  animation:ftStage .9s cubic-bezier(.16,1,.3,1) 2.5s forwards;
+}
+@keyframes ftStage{to{opacity:1;transform:translateY(0)}}
 .p{font:500 2.05cqw/1.2 system-ui,"PingFang SC","Noto Sans SC",sans-serif;color:#d5d0c5;margin:0;white-space:nowrap;text-align:center;letter-spacing:.03cqw}
 .p b{color:var(--gold);font-weight:700;text-shadow:0 0 1.2cqw var(--gold-glow)}
 .p .sep{display:inline-block;margin:0 .8cqw;opacity:.35;font-weight:300}
 
-/* 顶部常驻状态条 */
-.top{position:absolute;top:1.6cqw;left:4.5cqw;right:4.5cqw;display:flex;justify-content:space-between;font:1.05cqw system-ui,sans-serif;letter-spacing:.25cqw;color:var(--sub);z-index:3}
+/* 顶部常驻状态条（已去除右上角页数） */
+.top{position:absolute;top:1.6cqw;left:4.5cqw;right:4.5cqw;display:flex;justify-content:flex-start;font:1.05cqw system-ui,sans-serif;letter-spacing:.25cqw;color:var(--sub);opacity:.85;z-index:3}
 #bar{position:absolute;top:0;left:0;height:.35cqw;background:linear-gradient(90deg,transparent,var(--gold));width:0;z-index:5}
 
-/* SVG通用样式与动画 */
+/* SVG通用样式与延后协同动画 */
 .t{fill:var(--fg)}.tg{fill:var(--gold)}.tb{fill:var(--bad)}.tm{fill:var(--sub)}
 svg text{font-family:"Noto Sans SC","PingFang SC",system-ui,sans-serif}
 .ln{stroke:#ffffff38;stroke-width:2;fill:none}
-.dw{stroke-dasharray:var(--L,800);stroke-dashoffset:var(--L,800);animation:dr 1.4s ease var(--d,.4s) forwards}
+.dw{stroke-dasharray:var(--L,800);stroke-dashoffset:var(--L,800);animation:dr 1.4s ease var(--d,1.35s) forwards}
 @keyframes dr{to{stroke-dashoffset:0}}
-.fi{opacity:0;animation:fo .8s ease var(--d,0s) forwards}
+.fi{opacity:0;animation:fo .8s ease var(--d,1.3s) forwards}
 @keyframes fo{to{opacity:1}}
-.po{opacity:0;transform-box:fill-box;transform-origin:center;animation:pp .6s cubic-bezier(.2,1.4,.4,1) var(--d) forwards}
+.po{opacity:0;transform-box:fill-box;transform-origin:center;animation:pp .6s cubic-bezier(.2,1.4,.4,1) var(--d,1.3s) forwards}
 @keyframes pp{to{opacity:1}}
-.bar{transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);animation:gr 1.1s cubic-bezier(.2,.8,.2,1) var(--d) forwards}
+.bar{transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);animation:gr 1.1s cubic-bezier(.2,.8,.2,1) var(--d,1.3s) forwards}
 @keyframes gr{to{transform:none}}
-.rg{fill:none;stroke:#e8c27a66;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:pul 3s ease-out var(--d) infinite}
+.rg{fill:none;stroke:#e8c27a66;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:pul 3s ease-out var(--d,1.3s) infinite}
 @keyframes pul{from{transform:scale(.5);opacity:1}to{transform:scale(3.2);opacity:0}}
 .orb{transform-origin:400px 260px;animation:rot 9s linear infinite}
 @keyframes rot{to{transform:rotate(360deg)}}
@@ -63,7 +108,7 @@ svg text{font-family:"Noto Sans SC","PingFang SC",system-ui,sans-serif}
 .mv{opacity:0;animation:mvx var(--t) linear var(--d) infinite}
 @keyframes mvx{0%{transform:translate(var(--x1),var(--y1)) scale(var(--s));opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translate(var(--x2),var(--y2)) scale(var(--s));opacity:0}}
 .cgd{fill:url(#gd)}.cbd{fill:url(#bd)}
-.gone{animation:gn .5s ease 2.5s forwards}
+.gone{animation:gn .4s ease 3.7s forwards}
 @keyframes gn{to{opacity:0}}
 .spin{animation:sp 2.4s ease-in-out infinite alternate}
 @keyframes sp{from{transform:scaleX(1)}to{transform:scaleX(-1)}}
@@ -80,58 +125,59 @@ svg text{font-family:"Noto Sans SC","PingFang SC",system-ui,sans-serif}
 #ov b span{color:var(--gold)}
 </style></head>
 <body>
-<audio id="bgm" src="https://lf26-music-east.douyinstatic.com/obj/ies-music-hj/7691695799268330277.mp3" loop preload="auto"></audio>
+<audio id="bgm" src="https://sf11-cdn-tos.douyinstatic.com/obj/ies-music/7691038352723725075.mp3" loop preload="auto"></audio>
 
 <svg width="0" height="0" style="position:absolute"><defs>
 <radialGradient id="gd" cx=".35" cy=".3"><stop offset="0" stop-color="#fff3c9"/><stop offset=".45" stop-color="#e8c27a"/><stop offset="1" stop-color="#9b7a35"/></radialGradient>
 <radialGradient id="bd" cx=".35" cy=".3"><stop offset="0" stop-color="#b9c9c1"/><stop offset=".5" stop-color="#6f8a80"/><stop offset="1" stop-color="#43564f"/></radialGradient></defs></svg>
 
 <div id="st"><canvas id="cv"></canvas><div id="sc"></div>
-<div class="top"><span>VIBE 知识大赏 · 劣币驱逐良币</span><span id="pg"></span></div>
+<div class="top"><span>VIBE 知识大赏 · 劣币驱逐良币</span></div>
 <div class="wipe" id="wp"></div><div id="bar"></div>
 <div id="ov"><i>VIBE 知识大赏</i><b>劣币<span>驱逐</span>良币</b><i>▶ 点击开启（已配备背景音乐 · 支持方向键翻页）</i></div></div>
 
 <script>
-const d=x=>`style="--d:${x}s"`,J=a=>a.join('');
+// 统一将元素内的动画起始时间后移 1.25s，与视觉面板展开完美同步
+const d=x=>`style="--d:${(Number(x)+1.25).toFixed(2)}s"`,J=a=>a.join('');
 const coin=(c,t='')=>`<circle r="34" class="${c}"/><circle r="25" fill="none" stroke="#0b0b0f55" stroke-width="2"/><text y="9" text-anchor="middle" font-size="26" fill="#0b0b0f" font-weight="700">${t}</text>`;
-const mv=(c,x1,y1,x2,y2,dl,t,s=.8)=>`<g class="mv" style="--x1:${x1}px;--y1:${y1}px;--x2:${x2}px;--y2:${y2}px;--d:${dl}s;--t:${t}s;--s:${s}">${coin(c)}</g>`;
-const rows=(a,f=32,pre='',y0=85)=>J(a.map((r,i)=>{const y=y0+i*110,dl=.4+i*.8;return `<text x="270" y="${y}" text-anchor="end" font-size="${f}" class="fi ${r[2]}" ${d(dl)}>${r[0]}</text><path d="M300 ${y-10}H490" class="dw ln" style="--L:190;--d:${dl+.2}s"/><text x="510" y="${y}" font-size="${f}" class="fi ${r[3]}" ${d(dl+.7)}>${pre}${r[1]}</text>`}));
+const mv=(c,x1,y1,x2,y2,dl,t,s=.8)=>`<g class="mv" style="--x1:${x1}px;--y1:${y1}px;--x2:${x2}px;--y2:${y2}px;--d:${(Number(dl)+1.25).toFixed(2)}s;--t:${t}s;--s:${s}">${coin(c)}</g>`;
+const rows=(a,f=32,pre='',y0=85)=>J(a.map((r,i)=>{const y=y0+i*110,dl=.4+i*.8;return `<text x="270" y="${y}" text-anchor="end" font-size="${f}" class="fi ${r[2]}" ${d(dl)}>${r[0]}</text><path d="M300 ${y-10}H490" class="dw ln" style="--L:190;--d:${(dl+1.45).toFixed(2)}s"/><text x="510" y="${y}" font-size="${f}" class="fi ${r[3]}" ${d(dl+.7)}>${pre}${r[1]}</text>`}));
 const sv=x=>`<svg viewBox="0 0 800 520">${x}</svg>`;
 
 const V=[
 sv(J([0,1,2].map(i=>`<circle cx="400" cy="260" r="70" class="rg" ${d(i)}/>`))+`<g class="orb"><g transform="translate(580 260) scale(1.2)">${coin('cgd')}</g><g transform="translate(220 260) scale(1.2)">${coin('cbd')}</g></g><text x="400" y="295" text-anchor="middle" font-size="100" class="tg">?</text>`),
 sv(J(Array.from({length:40},(_,i)=>{const x=100+i%8*85,y=80+Math.floor(i/8)*85;return i==19?`<circle cx="${x}" cy="${y}" r="17" class="gdot"/>`:`<circle cx="${x}" cy="${y}" r="13" class="dt" ${d((i%8)*.15+Math.floor(i/8)*.08)}/>`}))+`<text x="400" y="500" text-anchor="middle" font-size="28" class="tg fi" ${d(1.8)}>金色的 TA：始终稳定，但在快节奏下不易被察觉</text>`),
-sv(`<path d="M60 260H740" class="dw" style="--L:700;stroke:#e8c27a;stroke-width:3"/>`+J([[130,'前5世纪','古希腊喜剧','已有类似记载'],[400,'16世纪','托马斯·格雷欣','观察提出假说'],[670,'19世纪','正式命名为','格雷欣法则']].map((n,i)=>`<circle cx="${n[0]}" cy="260" r="10" fill="#e8c27a" class="po" ${d(.8+i*1.2)}/><text x="${n[0]}" y="195" text-anchor="middle" font-size="34" class="tg fi" ${d(.8+i*1.2)}>${n[1]}</text><text x="${n[0]}" y="325" text-anchor="middle" font-size="26" class="t fi" ${d(1+i*1.2)}>${n[2]}</text><text x="${n[0]}" y="360" text-anchor="middle" font-size="24" class="tm fi" ${d(1.2+i*1.2)}>${n[3]}</text>`))+mv('cgd',130,260,670,260,.3,4.5,.5)),
+sv(`<path d="M60 260H740" class="dw" style="--L:700;stroke:#e8c27a;stroke-width:3;--d:1.4s"/>`+J([[130,'前5世纪','古希腊喜剧','已有类似记载'],[400,'16世纪','托马斯·格雷欣','观察提出假说'],[670,'19世纪','正式命名为','格雷欣法则']].map((n,i)=>`<circle cx="${n[0]}" cy="260" r="10" fill="#e8c27a" class="po" ${d(.8+i*1.2)}/><text x="${n[0]}" y="195" text-anchor="middle" font-size="34" class="tg fi" ${d(.8+i*1.2)}>${n[1]}</text><text x="${n[0]}" y="325" text-anchor="middle" font-size="26" class="t fi" ${d(1+i*1.2)}>${n[2]}</text><text x="${n[0]}" y="360" text-anchor="middle" font-size="24" class="tm fi" ${d(1.2+i*1.2)}>${n[3]}</text>`))+mv('cgd',130,260,670,260,.3,4.5,.5)),
 sv(`<rect x="40" y="90" width="150" height="120" rx="14" class="ln" stroke-dasharray="8 8" style="stroke:#e8c27a99"/><text x="115" y="235" text-anchor="middle" font-size="26" class="tm">抽屉珍藏</text><text x="400" y="70" text-anchor="middle" font-size="32" class="tg">良币（足金）· 被民间收藏</text><text x="400" y="490" text-anchor="middle" font-size="32" class="tb">劣币（掺铜）· 充斥流通市场</text>`+J([0,1,2].map(i=>mv('cgd',700,150,110,150,i*1.3,3.8,.9)))+J([0,1,2,3,4].map(i=>mv('cbd',-40,400,840,400,i*.6,3.2,.9)))),
-sv(`<g transform="translate(220 230) scale(2)">${coin('cgd','¥1')}</g><g transform="translate(580 230) scale(2)">${coin('cbd','¥1')}</g><text x="400" y="75" text-anchor="middle" font-size="30" class="tm fi" ${d(.3)}>市场当下：只认表面面值</text><path d="M220 100H580" class="dw ln" style="--L:360"/><text x="400" y="260" text-anchor="middle" font-size="80" class="t gone">=</text><text x="400" y="260" text-anchor="middle" font-size="80" class="tg fi" ${d(2.6)}>≠</text><text x="220" y="390" text-anchor="middle" font-size="32" class="tg fi" ${d(2.8)}>足金成色</text><text x="580" y="390" text-anchor="middle" font-size="32" class="tb fi" ${d(2.8)}>掺铜成色</text>`),
+sv(`<g transform="translate(220 230) scale(2)">${coin('cgd','¥1')}</g><g transform="translate(580 230) scale(2)">${coin('cbd','¥1')}</g><text x="400" y="75" text-anchor="middle" font-size="30" class="tm fi" ${d(.3)}>市场当下：只认表面面值</text><path d="M220 100H580" class="dw ln" style="--L:360;--d:1.5s"/><text x="400" y="260" text-anchor="middle" font-size="80" class="t gone">=</text><text x="400" y="260" text-anchor="middle" font-size="80" class="tg fi" ${d(2.6)}>≠</text><text x="220" y="390" text-anchor="middle" font-size="32" class="tg fi" ${d(2.8)}>足金成色</text><text x="580" y="390" text-anchor="middle" font-size="32" class="tb fi" ${d(2.8)}>掺铜成色</text>`),
 sv(rows([['良币','真诚 · 坚守底线','tg','t'],['劣币','套路 · 暧昧拉扯','tb','t'],['面值','随口承诺的喜欢','t','tm'],['成色','长期行动与代价','t','tg']],34,'',75)),
-sv(`<path d="M60 420H760" class="ln"/>`+J([['投入成本',20,85],['见效速度',90,30],['长期抗风险',25,90]].map((r,i)=>{const x=110+i*235;return `<rect x="${x}" y="${420-r[1]*3.3}" width="75" height="${r[1]*3.3}" rx="6" class="bar" style="fill:#7fa89a;--d:${.4+i*1}s"/><rect x="${x+90}" y="${420-r[2]*3.3}" width="75" height="${r[2]*3.3}" rx="6" class="bar" style="fill:#e8c27a;--d:${.7+i*1}s"/><text x="${x+82}" y="460" text-anchor="middle" font-size="28" class="t fi" ${d(.4+i*1)}>${r[0]}</text>`}))+`<rect x="490" y="30" width="22" height="22" rx="4" fill="#7fa89a"/><text x="522" y="48" font-size="24" class="tb">套路手段</text><rect x="630" y="30" width="22" height="22" rx="4" fill="#e8c27a"/><text x="662" y="48" font-size="24" class="tg">真实付出</text>`),
-sv(`<path d="M100 420H740M100 420V60" class="ln"/><path d="M130 180L310 145L490 125L670 120" class="dw" style="--L:600;stroke:#7fa89a;stroke-width:5;fill:none"/><path d="M130 220L310 270L490 295L670 310" class="dw" style="--L:600;stroke:#e8c27a;stroke-width:5;fill:none;--d:.3s"/>`+J(['初始吸引','聊天推拉','暧昧博弈','谁先投入'].map((t,i)=>`<text x="${130+i*180}" y="460" text-anchor="middle" font-size="26" class="tm">${t}</text>`))+`<text x="690" y="110" font-size="28" class="tb fi" ${d(1.6)}>劣币通关率</text><text x="690" y="340" font-size="28" class="tg fi" ${d(1.6)}>良币通关率</text>`),
-sv(`<path d="M60 420H760" class="ln"/><path d="M60 420C130 80 190 80 260 270S480 410 750 415" class="dw" style="--L:1100;stroke:#7fa89a;stroke-width:5;fill:none"/><path d="M60 418C300 418 430 380 560 230S700 95 750 85" class="dw" style="--L:1100;stroke:#e8c27a;stroke-width:5;fill:none;--d:.6s"/><text x="210" y="60" text-anchor="middle" font-size="30" class="tb fi" ${d(1.2)}>心动（快信号 · 衰减极快）</text><text x="550" y="130" text-anchor="end" font-size="30" class="tg fi" ${d(2.2)}>可靠（慢信号 · 随时间成形）</text><text x="760" y="460" text-anchor="end" font-size="26" class="tm">时间维度 →</text><circle cx="750" cy="85" r="12" class="gdot"/>`),
+sv(`<path d="M60 420H760" class="ln"/>`+J([['投入成本',20,85],['见效速度',90,30],['长期抗风险',25,90]].map((r,i)=>{const x=110+i*235;return `<rect x="${x}" y="${420-r[1]*3.3}" width="75" height="${r[1]*3.3}" rx="6" class="bar" style="fill:#7fa89a;--d:${(1.4+i*1).toFixed(2)}s"/><rect x="${x+90}" y="${420-r[2]*3.3}" width="75" height="${r[2]*3.3}" rx="6" class="bar" style="fill:#e8c27a;--d:${(1.7+i*1).toFixed(2)}s"/><text x="${x+82}" y="460" text-anchor="middle" font-size="28" class="t fi" ${d(.4+i*1)}>${r[0]}</text>`}))+`<rect x="490" y="30" width="22" height="22" rx="4" fill="#7fa89a"/><text x="522" y="48" font-size="24" class="tb">套路手段</text><rect x="630" y="30" width="22" height="22" rx="4" fill="#e8c27a"/><text x="662" y="48" font-size="24" class="tg">真实付出</text>`),
+sv(`<path d="M100 420H740M100 420V60" class="ln"/><path d="M130 180L310 145L490 125L670 120" class="dw" style="--L:600;stroke:#7fa89a;stroke-width:5;fill:none;--d:1.4s"/><path d="M130 220L310 270L490 295L670 310" class="dw" style="--L:600;stroke:#e8c27a;stroke-width:5;fill:none;--d:1.7s"/>`+J(['初始吸引','聊天推拉','暧昧博弈','谁先投入'].map((t,i)=>`<text x="${130+i*180}" y="460" text-anchor="middle" font-size="26" class="tm">${t}</text>`))+`<text x="690" y="110" font-size="28" class="tb fi" ${d(1.6)}>劣币通关率</text><text x="690" y="340" font-size="28" class="tg fi" ${d(1.6)}>良币通关率</text>`),
+sv(`<path d="M60 420H760" class="ln"/><path d="M60 420C130 80 190 80 260 270S480 410 750 415" class="dw" style="--L:1100;stroke:#7fa89a;stroke-width:5;fill:none;--d:1.4s"/><path d="M60 418C300 418 430 380 560 230S700 95 750 85" class="dw" style="--L:1100;stroke:#e8c27a;stroke-width:5;fill:none;--d:2s"/><text x="210" y="60" text-anchor="middle" font-size="30" class="tb fi" ${d(1.2)}>心动（快信号 · 衰减极快）</text><text x="550" y="130" text-anchor="end" font-size="30" class="tg fi" ${d(2.2)}>可靠（慢信号 · 随时间成形）</text><text x="760" y="460" text-anchor="end" font-size="26" class="tm">时间维度 →</text><circle cx="750" cy="85" r="12" class="gdot"/>`),
 sv(`<text x="270" y="75" text-anchor="end" font-size="24" class="tm">快市场常说</text><text x="510" y="75" font-size="24" class="tm">本质其实是</text>`+rows([['反应慢','踏实不轻浮','tb','tg'],['很无聊','不制造情感内耗','tb','tg'],['没感觉','提供健康的情绪稳定','tb','tg']],34,'',155)),
 sv(`<circle cx="250" cy="260" r="185" class="ln" stroke-dasharray="6 8" style="stroke:#7fa89a99"/><circle cx="650" cy="260" r="100" class="ln" style="stroke:#e8c27a99"/><text x="250" y="50" text-anchor="middle" font-size="28" class="tb">公开流动池 · 高流失</text><text x="650" y="135" text-anchor="middle" font-size="26" class="tg">高信任圈层 · 深度留存</text>`+mv('cbd',120,180,380,340,0,4.5,.6)+mv('cbd',360,150,150,360,1.2,4.5,.6)+mv('cbd',140,320,380,200,2.4,4.5,.6)+mv('cbd',250,110,260,420,3.2,4.5,.6)+J([0,1,2].map(i=>mv('cgd',300,260,650,260,i*1.3,4,.6)))),
 sv(`<text x="400" y="50" text-anchor="middle" font-size="32" class="tg fi">验币三问模型</text>`+rows([['一致性','说的和做的是否长期合一','tg','t'],['时间跨度','将周期拉长到一年以上再看','tg','t'],['付出代价','是否愿意为关系承担实际成本','tg','t']],32,'✓ ',150)),
 sv(`<circle cx="400" cy="260" r="215" class="ln" style="stroke:#e8c27a33"/><circle cx="400" cy="260" r="185" class="rg" ${d(0)}/><g transform="translate(400 260)"><g class="spin"><g transform="scale(3.8)">${coin('cgd','良')}</g></g></g>`)
 ];
 
-/* 核心文案配置：标题黄色醒目，正文单行显示、主次分明 */
+// 已彻底移除所有 00/01/02 序号内容
 const S=[
-[8000,'00 · 核心困惑','为什么 <b>三观越正</b> 的人，反而 <b>越难谈恋爱</b>？','你<b>真诚有底线</b>，却拼不过套路<span class="sep">/</span>这不是你的问题，而是市场的<b>逆淘汰机制</b>',0,'为什么优质的好品格，在开局往往“失灵”？'],
-[7500,'01 · 认知纠偏','先别自责：这并不是 <b>“你不够好”</b> 的问题','真正优秀的成色需要<b>时间验证</b><span class="sep">/</span>而快节奏的开局<b>只奖励刺激与速度</b>',1,'每个主体都在被快速扫描，稳定的信号最难被前置读到'],
-[8500,'02 · 底层规律','格雷欣法则：经济学里的 <b>劣币驱逐良币</b>','当成色不同的货币面值相同：<b>良币必被私藏，劣币满街狂奔</b>',2,'从古希腊到现代制度经济学，一条被反复验证的通则'],
-[8000,'03 · 运作机制','为什么优质的良币，会 <b>彻底退出流通</b>？','人人都想<b>花掉贬值劣币、留在手里足金良币</b><span class="sep">/</span>久而久之市面<b>全剩劣币</b>',3,'足金金币被收进抽屉，掺铜假币持续充斥市场'],
-[8000,'04 · 成立前提','劣币能得逞，必须满足 <b>两个严苛条件</b>','① <b>面值相同</b>（只按标价买单）<span class="sep">｜</span>② <b>难以分辨</b>（当下无人能验明真实成色）',4,'只要打破任一前提，劣币的优势便会瞬间失效'],
-[8500,'05 · 映射恋爱','把“商品交易”换成 <b>“恋爱关系”</b>','<b>面值</b>是人人会说的情话<span class="sep">｜</span><b>成色</b>是靠谱的行动<span class="sep">｜</span><b>劣币套路通吃，良币因真诚被动</b>',5,'好品质未变，只是被放进了一个看不清成色的信息黑盒'],
-[8000,'06 · 成本博弈','<b>套路极其廉价</b>，而 <b>真诚成本极高</b>','套路能<b>批量复制与低成本试错</b><span class="sep">/</span>真诚却需要<b>长期投入并承担全部后果</b>',6,'成本与见效周期的极端不对称（逻辑示意）'],
-[8500,'07 · 筛选机制','快餐式规则，正在 <b>定向淘汰良币</b>','初始关卡只奖励<b>推拉刺激与即时反应</b><span class="sep">/</span>守底线的人直接被<b>游戏规则筛掉</b>',7,'劣币在前期关卡的存活概率远远高于良币'],
-[8000,'08 · 信号差异','心动是 <b>快信号</b>，可靠是 <b>慢信号</b>','心动<b>来得快衰减更快</b><span class="sep">/</span>而支撑一辈子关系的，永远是<b>需要岁月沉淀的可靠</b>',8,'两条信号曲线的黄金交叉点，它的名字叫“时间”'],
-[8000,'09 · 标签逆转','你的<b>优秀特质</b>，在浮躁环境里<b>被逆向翻译</b>','慢热被翻译成<b>迟钝</b>，克制被翻译成<b>无聊</b><span class="sep">/</span>别因浅薄评价<b>怀疑自己的成色</b>',9,'同一种稳重特质，在不同认知层级下的两种极端解读'],
-[8000,'10 · 良币归宿','良币从未消失，只是 <b>主动退出了公域流动</b>','靠谱的人退出了快餐匹配，悄悄聚集在<b>小圈子、熟人信任与长久深交</b>中',10,'劣币停留在高频流动池，良币最终汇聚于深度信任圈'],
-[8500,'11 · 破局法则','如何打破死局？学会 <b>“验币三问”</b>','① <b>验一致性</b>（言行是否合一）<span class="sep">｜</span>② <b>验时间</b>（拉长观察周期）<span class="sep">｜</span>③ <b>验代价</b>（肯付出什么）',11,'把隐蔽的成色，变成肉眼可见的硬指标'],
-[8500,'12 · 终局结语','别变成 <b>劣币</b>，也永远别放弃做 <b>足金良币</b>','让自己的成色<b>清晰可见</b><span class="sep">/</span>也修炼一双<b>识破套路、读懂良币的慧眼</b>',12,'劣币驱逐良币 · VIBE 知识大赏']
+[8000,'核心困惑','为什么 <b>三观越正</b> 的人，反而 <b>越难谈恋爱</b>？','你<b>真诚有底线</b>，却拼不过套路<span class="sep">/</span>这不是你的问题，而是市场的<b>逆淘汰机制</b>',0,'为什么优质的好品格，在开局往往“失灵”？'],
+[7500,'认知纠偏','先别自责：这并不是 <b>“你不够好”</b> 的问题','真正优秀的成色需要<b>时间验证</b><span class="sep">/</span>而快节奏的开局<b>只奖励刺激与速度</b>',1,'每个主体都在被快速扫描，稳定的信号最难被前置读到'],
+[8500,'底层规律','格雷欣法则：经济学里的 <b>劣币驱逐良币</b>','当成色不同的货币面值相同：<b>良币必被私藏，劣币满街狂奔</b>',2,'从古希腊到现代制度经济学，一条被反复验证的通则'],
+[8000,'运作机制','为什么优质的良币，会 <b>彻底退出流通</b>？','人人都想<b>花掉贬值劣币、留在手里足金良币</b><span class="sep">/</span>久而久之市面<b>全剩劣币</b>',3,'足金金币被收进抽屉，掺铜假币持续充斥市场'],
+[8000,'成立前提','劣币能得逞，必须满足 <b>两个严苛条件</b>','① <b>面值相同</b>（只按标价买单）<span class="sep">｜</span>② <b>难以分辨</b>（当下无人能验明真实成色）',4,'只要打破任一前提，劣币的优势便会瞬间失效'],
+[8500,'映射恋爱','把“商品交易”换成 <b>“恋爱关系”</b>','<b>面值</b>是人人会说的情话<span class="sep">｜</span><b>成色</b>是靠谱的行动<span class="sep">｜</span><b>劣币套路通吃，良币因真诚被动</b>',5,'好品质未变，只是被放进了一个看不清成色的信息黑盒'],
+[8000,'成本博弈','<b>套路极其廉价</b>，而 <b>真诚成本极高</b>','套路能<b>批量复制与低成本试错</b><span class="sep">/</span>真诚却需要<b>长期投入并承担全部后果</b>',6,'成本与见效周期的极端不对称（逻辑示意）'],
+[8500,'筛选机制','快餐式规则，正在 <b>定向淘汰良币</b>','初始关卡只奖励<b>推拉刺激与即时反应</b><span class="sep">/</span>守底线的人直接被<b>游戏规则筛掉</b>',7,'劣币在前期关卡的存活概率远远高于良币'],
+[8000,'信号差异','心动是 <b>快信号</b>，可靠是 <b>慢信号</b>','心动<b>来得快衰减更快</b><span class="sep">/</span>而支撑一辈子关系的，永远是<b>需要岁月沉淀的可靠</b>',8,'两条信号曲线的黄金交叉点，它的名字叫“时间”'],
+[8000,'标签逆转','你的<b>优秀特质</b>，在浮躁环境里<b>被逆向翻译</b>','慢热被翻译成<b>迟钝</b>，克制被翻译成<b>无聊</b><span class="sep">/</span>别因浅薄评价<b>怀疑自己的成色</b>',9,'同一种稳重特质，在不同认知层级下的两种极端解读'],
+[8000,'良币归宿','良币从未消失，只是 <b>主动退出了公域流动</b>','靠谱的人退出了快餐匹配，悄悄聚集在<b>小圈子、熟人信任与长久深交</b>中',10,'劣币停留在高频流动池，良币最终汇聚于深度信任圈'],
+[8500,'破局法则','如何打破死局？学会 <b>“验币三问”</b>','① <b>验一致性</b>（言行是否合一）<span class="sep">｜</span>② <b>验时间</b>（拉长观察周期）<span class="sep">｜</span>③ <b>验代价</b>（肯付出什么）',11,'把隐蔽的成色，变成肉眼可见的硬指标'],
+[8500,'终局结语','别变成 <b>劣币</b>，也永远别放弃做 <b>足金良币</b>','让自己的成色<b>清晰可见</b><span class="sep">/</span>也修炼一双<b>识破套路、读懂良币的慧眼</b>',12,'劣币驱逐良币 · VIBE 知识大赏']
 ];
 
-const sc=document.getElementById('sc'),wp=document.getElementById('wp'),bar=document.getElementById('bar'),ov=document.getElementById('ov'),pg=document.getElementById('pg'),bgm=document.getElementById('bgm');
+const sc=document.getElementById('sc'),wp=document.getElementById('wp'),bar=document.getElementById('bar'),ov=document.getElementById('ov'),bgm=document.getElementById('bgm');
 let tm,cur=0;
 
 function go(i){
@@ -159,7 +205,6 @@ function go(i){
     </div>
   `;
   sc.appendChild(e);
-  pg.textContent=`${String(i+1).padStart(2,'0')} / ${S.length}`;
 
   bar.style.transition='none';bar.style.width=i/S.length*100+'%';
   void bar.offsetWidth;
@@ -183,7 +228,7 @@ addEventListener('keydown',e=>{
   }
 });
 
-/* 背景星光微粒 */
+/* 背景星空微粒 */
 const cv=document.getElementById('cv'),ctx=cv.getContext('2d'),st=document.getElementById('st');
 let P=[],w,h;
 function rs(){
