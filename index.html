@@ -261,7 +261,7 @@ svg text{font-family:"Noto Sans SC","PingFang SC",system-ui,sans-serif}
   <div id="ov">
     <i>VIBE 知识大赏</i>
     <b>劣币<span>驱逐</span>良币</b>
-    <i>▶ 点击启幕（已配高沉浸音效 · 方向键可随意切页）</i>
+    <i>▶ 点击启幕</i>
   </div>
 </div>
 
@@ -325,7 +325,7 @@ sv(`<path d="M80 400H800" class="ln"/>`+
 `<text x="800" y="440" text-anchor="end" font-size="24" class="tm">时间跨度 →</text><circle cx="770" cy="130" r="11" class="gdot"/>`),
 
 // 9. 标签逆转（表头「快餐规则常说」X:240 与「本质其实是」X:640 百分百同轴居中对齐）
-sv(`<text x="240" y="75" text-anchor="middle" font-size="26" class="tm">快餐规则常说</text><text x="640" y="75" text-anchor="middle" font-size="26" class="tm">本质其实是</text>`+rows([['反应慢','踏实且不轻浮','tb','tg'],['很无聊','不制造情绪内耗','tb','tg'],['没感觉','提供健康的情绪稳定','tb','tg']],26,'',145,95)),
+sv(`<text x="240" y="75" text-anchor="middle" font-size="26" class="tm">快餐规则常说</text><text x="640" y="75" text-anchor="middle" font-size="26" class="tm">本质其实是</text>`+rows([['反应慢','踏实且不轻浮','tb','tg'],['很无聊','不制造情绪内耗','tb','tg'],['没感觉','提供健康的情绪','tb','tg']],26,'',145,95)),
 
 // 10. 良币归宿（双圈流动模型：居中平衡）
 sv(`<circle cx="270" cy="240" r="170" class="ln" stroke-dasharray="7 9" style="stroke:#6ea89799"/><circle cx="630" cy="240" r="120" class="ln" style="stroke:#f5cb7d99"/><text x="270" y="45" text-anchor="middle" font-size="29" class="tb">公开流动池 · 高流失</text><text x="630" y="90" text-anchor="middle" font-size="29" class="tg">深度信任圈 · 终身留存</text>`+mv('cbd',130,170,390,320,0,4.5,.65)+mv('cbd',370,140,160,340,1.2,4.5,.65)+mv('cbd',150,300,390,190,2.4,4.5,.65)+mv('cbd',270,100,270,390,3.2,4.5,.65)+J([0,1,2].map(i=>mv('cgd',310,240,630,240,i*1.3,4,.65)))),
